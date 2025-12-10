@@ -1,0 +1,14 @@
+// src/components/ErrorMessage.jsx (CORRECT VERSION)
+import React from 'react';
+
+const ErrorMessage = ({ message }) => {
+  return (
+    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-lg mx-auto shadow-md" role="alert">
+      <strong className="font-bold">Error:</strong>
+      <span className="block sm:inline ml-2">{message}</span>
+    </div>
+  );
+};
+
+// This line is CRUCIAL and fixes the SyntaxError:
+export default ErrorMessage;
