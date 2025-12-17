@@ -63,24 +63,24 @@ const WeatherCard = ({ data }) => {
       </div>
 
       {/* Details Grid for (Humidity, Wind Speed, Condition) */}
-      <div className="grid grid-cols-3 gap-6 text-center border-t border-gray-200 dark:border-gray-700 pt-4">
+      <div className="grid grid-cols-3 gap-2 bg-gray-100 dark:bg-gray-900 p-4 rounded-xl shadow-inner">
         
         {/* Humidity  */}
-        <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-inner">
-          <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">HUMIDITY</p>
-          <p className="text-xl font-bold mt-1">{data.humidity}%</p>
+        <div className="text-center">
+          <p className="text-[10px] sm:text-sm font-light text-gray-500 dark:text-gray-400">Humidity</p>
+          <p className="text-sm sm:text-xl font-semibold dark:text-white">{data.humidity}%</p>
         </div>
         
         {/* Wind Speed  */}
-        <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-inner">
-          <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">WIND SPEED</p>
-          <p className="text-xl font-bold mt-1">{data.windSpeed} km/h</p>
+        <div className="text-center border-l border-r border-gray-300 dark:border-gray-700 px-1">
+          <p className="text-[10px] sm:text-sm font-light text-gray-500 dark:text-gray-400">Wind Speed</p>
+          <p className="text-sm sm:text-xl font-semibold dark:text-white">{data.windSpeed} km/h</p>
         </div>
         
         {/* Weather Condition  */}
-        <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-inner">
-          <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">CONDITION</p>
-          <p className="text-xl font-bold mt-1">{data.weatherCondition}</p>
+        <div className="text-center">
+          <p className="text-[10px] sm:text-sm font-light text-gray-500 dark:text-gray-400">Condiion</p>
+          <p className="text-sm sm:text-xl font-semibold dark:text-white truncate">{data.weatherCondition}</p>
         </div>
 
       </div>
