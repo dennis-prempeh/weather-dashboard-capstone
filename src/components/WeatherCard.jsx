@@ -79,7 +79,7 @@ const WeatherCard = ({ data }) => {
         
         {/* Weather Condition  */}
         <div className="text-center">
-          <p className="text-[10px] sm:text-sm font-light text-gray-500 dark:text-gray-400">Conditon</p>
+          <p className="text-[10px] sm:text-sm font-light text-gray-500 dark:text-gray-400">Condition</p>
           <p className="text-sm sm:text-xl font-semibold dark:text-white truncate">{data.weatherCondition}</p>
         </div>
 
