@@ -1,11 +1,10 @@
-// src/components/WeatherCard.jsx
 import React from 'react';
 import { 
     FaSun, FaCloud, FaCloudRain, FaSnowflake, 
     FaSmog, FaBolt, FaQuestionCircle 
 } from 'react-icons/fa';
 
-// Helper function to map weather conditions to React Icons
+// Function to map weather conditions to React Icons
 const getWeatherIcon = (condition) => {
   switch (condition) {
     case 'Clear':
@@ -63,7 +62,7 @@ const WeatherCard = ({ data }) => {
         </p>
       </div>
 
-      {/* Details Grid (Humidity, Wind Speed, Condition) */}
+      {/* Details Grid for (Humidity, Wind Speed, Condition) */}
       <div className="grid grid-cols-3 gap-6 text-center border-t border-gray-200 dark:border-gray-700 pt-4">
         
         {/* Humidity  */}

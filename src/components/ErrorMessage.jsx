@@ -1,4 +1,3 @@
-// src/components/ErrorMessage.jsx (CORRECT VERSION)
 import React from 'react';
 
 const ErrorMessage = ({ message }) => {
@@ -9,6 +8,4 @@ const ErrorMessage = ({ message }) => {
     </div>
   );
 };
-
-// This line is CRUCIAL and fixes the SyntaxError:
 export default ErrorMessage;
