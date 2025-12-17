@@ -43,7 +43,7 @@ const WeatherCard = ({ data }) => {
       {/* City and Country Header */}
       <div className="flex justify-between items-start mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
         <div>
-          <h2 className="text-4xl font-extrabold text-blue-600 dark:text-blue-400">
+          <h2 className="text-4xl font-extrabold text-teal-600 dark:text-cyan-400">
             {data.city}, {data.country}
           </h2>
           <p className="text-lg font-medium capitalize text-gray-600 dark:text-gray-300">

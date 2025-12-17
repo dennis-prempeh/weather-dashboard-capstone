@@ -162,7 +162,7 @@ useEffect(() => {
       </button>
 
       {/* Header */}
-      <h1 className="text-5xl font-extrabold text-blue-600 dark:text-blue-400 mb-10 transition-colors duration-500 mt-12">
+      <h1 className="text-5xl font-extrabold text-teal-600 dark:text-cyan-400 mb-10 transition-colors duration-500 mt-12">
         Weather Dashboard
       </h1>
 

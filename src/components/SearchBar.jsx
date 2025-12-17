@@ -29,8 +29,8 @@ const SearchBar = ({ onSearch }) => {
       />
       <button
         type="submit"
-        // 3. Button styling: Brighter blue color, slight hover effect
-        className="ml-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-all flex items-center"
+        // Button styling: Change from blue-600 to cyan-600/500
+        className="ml-4 px-6 py-2 bg-teal-600 dark:bg-cyan-500 text-white font-semibold rounded-lg shadow-md hover:bg-cyan-700 dark:hover:bg-cyan-600 transition-all flex items-center"
         aria-label="Search"
       >
         <FaSearch className="mr-2" /> 
