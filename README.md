@@ -35,7 +35,7 @@ Follow these steps to set up the project environment on your local machine.
 git clone [YOUR_REPOSITORY_URL_HERE]
 cd react-weather-dashboard
 npm install
-
+```
 ### Step 2: Acquire an API Key
 You need a personal API key to fetch weather data:
 
@@ -52,9 +52,9 @@ VITE_WEATHER_API_KEY="YOUR_API_KEY_GOES_HERE"
 VITE_BASE_URL="[https://api.openweathermap.org/data/2.5/](https://api.openweathermap.org/data/2.5/)"
 
 ### Step 4: Start the Development Server
-Bash
-
+```Bash            
 npm run dev
+```
 The application should now be accessible at http://localhost:5173. You will be prompted by your browser to share your location.
 
 #📂 Project Organization Highlights
