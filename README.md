@@ -7,9 +7,9 @@ A responsive single-page application built to display real-time weather data fet
 This dashboard was developed focusing on user experience, stability, and meeting the core project requirements, including a few stretch goals:
 
 * **Real-Time Weather Data:** Fetches and displays current conditions, temperature, humidity, and wind speed.
-* **Persistent Theme Toggle:** Implemented a Light/Dark mode switch. The user's theme preference is saved and restored using **Local Storage** (Stretch Goal 3).
+* **Persistent Theme Toggle:** Implemented a Light/Dark mode switch. The user's theme preference is saved and restored using **Local Storage**.
 * **Automatic Location Detection:** On initial load, the app attempts to use the browser's Geolocation API to find the user's current weather (Stretch Goal 4). Falls back to a default city if permission is denied.
-* **Data Auto-Refresh:** The weather data is automatically updated every **5 minutes** (300,000ms) using `setInterval` to ensure data freshness (Functional Requirement 4).
+* **Data Auto-Refresh:** The weather data is automatically updated every **5 minutes** (300,000ms) using `setInterval` to ensure data freshness.
 * **Modern UI/UX:** Styled using Tailwind CSS with a focus on high contrast, a cohesive Teal-based color palette, and full responsiveness.
 * **Robust Error Handling:** Clear messages are displayed to the user for invalid city names (404) or network failures.
 
