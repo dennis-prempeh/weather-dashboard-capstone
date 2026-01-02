@@ -58,7 +58,7 @@ function App() {
 
   // COMBINED LOGIC: Geolocation, Fetch, and Auto-Refresh
   useEffect(() => {
-    // 1. Initial Load: Geolocation
+    // Initial Load: Geolocation
     if ("geolocation" in navigator && !city) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -74,7 +74,7 @@ function App() {
         );
     } 
 
-    // 2. City Search & Auto-Refresh
+    // City Search & Auto-Refresh
     if (city) {
         loadAllWeatherData({ city: city });
 
@@ -126,6 +126,33 @@ function App() {
       {forecast.length > 0 && !loading && !error && (
         <Forecast days={forecast} />
       )}
+
+      {/*footer*/}
+      <footer className="w-full mt-12 mb-8">
+        <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
+        <div className="max-w-lg mx-auto pt-8 text-center px-4">
+          <p className="text-gray-600 dark:text-gray-400 font-bold tracking-tight">
+            © 2026 Dennis Prempeh
+          </p>
+          <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 uppercase tracking-[0.2em] font-medium">
+            Weather Dashboard Capstone
+          </p>
+          
+          <div className="mt-6 flex justify-center items-center gap-2">
+            <span className="h-px w-4 bg-teal-600/30"></span>
+            <a 
+              href="https://openweathermap.org/" 
+              target="_blank" 
+              rel="noreferrer"
+              className="text-teal-600 dark:text-teal-400 text-xs hover:text-teal-500 transition-colors font-semibold"
+            >
+              Powered by OpenWeatherMap
+            </a>
+            <span className="h-px w-4 bg-teal-600/30"></span>
+          </div>
+        </div>
+      </footer>
+
     </div>
   );
 }
