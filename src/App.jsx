@@ -1,29 +1,24 @@
 import React, { useState, useEffect, useCallback } from 'react';
-
-
-import { fetchWeatherByLocation } from './services/weatherService'; 
+import { fetchWeatherByLocation, fetch5DayForecast } from './services/weatherService'; 
 import SearchBar from './components/SearchBar';
 import WeatherCard from './components/WeatherCard';
+import Forecast from './components/Forecast';
 import ErrorMessage from './components/ErrorMessage';
 import { FaSun, FaMoon, FaMapMarkerAlt } from 'react-icons/fa';
 
 function App() {
-  const [theme, setTheme] = useState(
-    localStorage.getItem('theme') || 'light'
-  );
-
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const [weatherData, setWeatherData] = useState(null);
-  const [city, setCity] = useState('Accra'); 
-  const [coords, setCoords] = useState(null); 
+  const [forecast, setForecast] = useState([]); // New state for 5-day forecast
+  const [city, setCity] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [initialLoadAttempted, setInitialLoadAttempted] = useState(false); 
 
   // Theme Toggle Logic
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
+
   useEffect(() => {
     const root = window.document.documentElement;
     if (theme === 'dark') {
@@ -36,107 +31,61 @@ function App() {
   
   // Search Logic
   const handleSearch = useCallback((newCity) => {
-    if (newCity.trim().toLowerCase() !== city.trim().toLowerCase()) {
-      setCity(newCity);
-      setCoords(null);
-    }
-  }, [city]);
+    setCity(newCity);
+  }, []);
 
-  // GEOLOCATION ON INITIAL LOAD
-  useEffect(() => {
-    if (initialLoadAttempted) return; 
-
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
+  // Main Fetching Function: Now fetches Current AND Forecast
+  const loadAllWeatherData = async (params) => {
+    setLoading(true);
+    setError(null);
+    try {
+        // Run both API calls at the same time
+        const [current, fiveDay] = await Promise.all([
+            fetchWeatherByLocation(params),
+            fetch5DayForecast(params)
+        ]);
         
-        (position) => {
-          setCoords({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-          });
-          
-          setCity(null); 
-          setInitialLoadAttempted(true); 
-        },
-
-        // Error Handler
-        (err) => {
-          console.error("Geolocation Error:", err);
-          
-          setInitialLoadAttempted(true);
-        }
-      );
-    } else {
-      console.log("Geolocation not supported by this browser.");
-      setInitialLoadAttempted(true); 
+        setWeatherData(current);
+        setForecast(fiveDay);
+        setCity(current.city); 
+    } catch (err) {
+        setError(err.message);
+        if (params.lat) setCity('Accra'); // Fallback if geo fails
+    } finally {
+        setLoading(false);
     }
-  }, [initialLoadAttempted]);
-
-
-
-// GEOLOCATION, FETCH, AND AUTO-REFRESH 
-useEffect(() => {
-    
-  const loadWeather = async (params) => {
-      if (!loading) setLoading(true); 
-      setError(null);
-      
-      try {
-          const data = await fetchWeatherByLocation(params);
-          setWeatherData(data);
-          setCity(data.city); 
-      } catch (err) {
-          setError(err.message);
-          if (params.lat) {
-              setCity('Accra'); 
-          }
-      } finally {
-          setLoading(false);
-      }
   };
 
-  // Initial Load Logic
-  let initialLoadParams = null;
-  let isGeolocating = false;
+  // COMBINED LOGIC: Geolocation, Fetch, and Auto-Refresh
+  useEffect(() => {
+    // 1. Initial Load: Geolocation
+    if ("geolocation" in navigator && !city) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                loadAllWeatherData({ 
+                    lat: position.coords.latitude, 
+                    lon: position.coords.longitude 
+                });
+            },
+            (err) => {
+                console.error("Geolocation failed:", err);
+                setCity('Accra');
+            }
+        );
+    } 
 
-  if ("geolocation" in navigator && !city) {
-      isGeolocating = true;
-      navigator.geolocation.getCurrentPosition(
-          (position) => {
-              const params = {
-                  lat: position.coords.latitude,
-                  lon: position.coords.longitude
-              };
-              loadWeather(params);
-          },
-          (err) => {
-              console.error("Geolocation failed, loading default city (Accra).", err);
-              loadWeather({ city: 'Accra' }); 
-          }
-      );
-  } 
+    // 2. City Search & Auto-Refresh
+    if (city) {
+        loadAllWeatherData({ city: city });
 
-  // City Search Logic
-  if (city && !isGeolocating) {
-      loadWeather({ city: city });
-  }
-  
-  let intervalId;
-  if (city) {
-      intervalId = setInterval(() => {
-          console.log(`Auto-refreshing weather for ${city}...`);
-          const refreshParams = { city: city };
-          loadWeather(refreshParams);
-      }, 300000); 
-  }
-  
-  return () => {
-      if (intervalId) {
-          clearInterval(intervalId);
-      }
-  };
+        const intervalId = setInterval(() => {
+            console.log(`Auto-refreshing for ${city}...`);
+            loadAllWeatherData({ city: city });
+        }, 300000); // 5 minutes
 
-}, [city]); 
+        return () => clearInterval(intervalId);
+    }
+  }, [city]); 
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center p-4 sm:p-8 transition-colors duration-500">
@@ -151,29 +100,31 @@ useEffect(() => {
       </button>
 
       {/* Header */}
-      <h1 className="text-5xl font-extrabold text-teal-600 dark:text-cyan-400 mb-10 transition-colors duration-500 mt-12">
+      <h1 className="text-4xl sm:text-5xl font-extrabold text-teal-600 dark:text-teal-400 mb-10 transition-colors duration-500 mt-12">
         Weather Dashboard
       </h1>
 
-      {/* Search Bar Component */}
       <SearchBar onSearch={handleSearch} />
       
-      {/* Loading State */}
-      {loading && (
+      {loading && !weatherData && (
         <p className="text-xl text-gray-700 dark:text-gray-300 mt-4 flex items-center">
-          {coords ? <FaMapMarkerAlt className="mr-2 text-red-500" /> : null}
-          Loading weather for {coords ? 'your location' : city}...
+          <FaMapMarkerAlt className="mr-2 text-teal-500 animate-bounce" />
+          Loading weather...
         </p>
       )}
 
-      {/* Error Message Component */}
       {error && !loading && (
         <ErrorMessage message={error} />
       )}
 
-      {/* Weather Card Component */}
+      {/* Current Weather Card */}
       {weatherData && !loading && !error && (
         <WeatherCard data={weatherData} />
+      )}
+
+      {/* 5-Day Forecast */}
+      {forecast.length > 0 && !loading && !error && (
+        <Forecast days={forecast} />
       )}
     </div>
   );

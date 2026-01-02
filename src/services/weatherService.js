@@ -50,3 +50,34 @@ export const fetchWeatherByLocation = async (params) => {
         throw new Error('Could not connect to the weather service. Check network or API key activation.');
     }
 };
+
+
+// 5-Day Forecast feature
+
+export const fetch5DayForecast = async (params) => {
+    let url = `${BASE_URL}forecast?appid=${API_KEY}&units=metric`;
+    
+    if (params.city) {
+        url += `&q=${params.city}`;
+    } else if (params.lat && params.lon) {
+        url += `&lat=${params.lat}&lon=${params.lon}`;
+    }
+
+    try {
+        const response = await axios.get(url);
+        
+        // The API returns 40 timestamps. We filter for 12:00 PM each day 
+        // to get a consistent "daily" snapshot.
+        const dailyData = response.data.list.filter(reading => reading.dt_txt.includes("12:00:00"));
+
+        return dailyData.map(item => ({
+            day: new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' }),
+            temp: Math.round(item.main.temp),
+            icon: item.weather[0].icon,
+            condition: item.weather[0].main
+        }));
+    } catch (error) {
+        console.error("Forecast Error:", error);
+        return [];
+    }
+};
